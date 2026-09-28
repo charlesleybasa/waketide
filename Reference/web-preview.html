@@ -1,0 +1,873 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"></head><body>
+<title>Waketide</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:wght@400;500;700&display=swap">
+<style>
+:root{
+  --ink:#1c1a33; --ink2:#4a4868; --indigo:#4f46d8; --violet:#8a86f8; --mint:#8fe8d8; --peach:#ffc7a0; --coral:#e8557a;
+  --ground:#efe9f7; --glass-a:rgba(255,255,255,.72); --glass-b:rgba(255,255,255,.34); --edge:rgba(255,255,255,.85);
+  --display:'Bricolage Grotesque','DM Sans',system-ui,sans-serif; --body:'DM Sans',system-ui,-apple-system,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--body);font-size:15px;-webkit-font-smoothing:antialiased;overflow:hidden}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none;padding:0}
+h1,h2,h3,p{margin:0}
+:focus-visible{outline:3px solid var(--indigo);outline-offset:2px}
+.app{position:relative;height:100%;max-width:430px;margin:0 auto;overflow:hidden;background:var(--ground)}
+.aurora{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.blob{position:absolute;border-radius:50%;filter:blur(46px);animation:drift 18s ease-in-out infinite alternate}
+.b1{left:-90px;top:-70px;width:340px;height:340px;background:#a3a4f9;opacity:.9}
+.b2{right:-100px;top:24%;width:300px;height:300px;background:#8fe8d8;opacity:.7;animation-duration:22s}
+.b3{left:-60px;bottom:8%;width:340px;height:340px;background:#ffc7a0;opacity:.8;animation-duration:25s}
+.b4{right:-40px;bottom:-60px;width:260px;height:260px;background:#f7b0da;opacity:.6;animation-duration:20s}
+@keyframes drift{from{transform:translate(0,0) scale(1)}to{transform:translate(28px,-36px) scale(1.14)}}
+.glass{background:linear-gradient(135deg,var(--glass-a),var(--glass-b));-webkit-backdrop-filter:blur(22px) saturate(1.7);backdrop-filter:blur(22px) saturate(1.7);border:1px solid var(--edge);box-shadow:0 10px 30px rgba(80,60,160,.14),inset 0 1px 1px rgba(255,255,255,.95),inset 0 -10px 20px rgba(255,255,255,.16)}
+.screen{position:absolute;inset:0;overflow-y:auto;padding:14px 16px 128px;display:flex;flex-direction:column;gap:14px;scrollbar-width:none}
+.screen::-webkit-scrollbar{display:none}
+.hdr{display:flex;align-items:center;justify-content:space-between;min-height:48px;flex:none}
+.ttl{font-family:var(--display);font-weight:800;font-size:34px;letter-spacing:-.02em;line-height:1}
+.hbtns{display:flex;gap:8px}
+.ib{width:44px;height:44px;border-radius:50%;display:inline-grid;place-items:center;flex:none;background:rgba(255,255,255,.55);border:1px solid var(--edge);color:#38366a;box-shadow:inset 0 1px 1px #fff,0 4px 12px rgba(80,60,160,.12);transition:transform .35s cubic-bezier(.34,1.56,.64,1)}
+.ib:active{transform:scale(.9)}
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--ink2)}
+.days{display:flex;padding:6px;border-radius:26px;flex:none}
+.day{position:relative;flex:1;height:64px;border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:var(--ink);font-size:12px;font-weight:600;transition:background .3s,color .3s}
+.day b{font-family:var(--display);font-size:20px;font-weight:700}
+.day.on{background:linear-gradient(160deg,#7d7cf5,#4f46d8);color:#fff;box-shadow:0 8px 20px rgba(79,70,216,.4),inset 0 1px 1px rgba(255,255,255,.55);animation:pop .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes pop{from{transform:scale(.85)}to{transform:scale(1)}}
+.pip{width:5px;height:5px;border-radius:50%;background:transparent}
+.pip.y{background:var(--indigo)}
+.day.on .pip.y{background:#fff}
+.hero{position:relative;overflow:hidden;border-radius:28px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;flex:none;min-height:104px}
+.hero .big{font-family:var(--display);font-size:40px;font-weight:800;letter-spacing:-.03em;line-height:1;margin-top:4px}
+.hero .sub{font-size:14px;font-weight:500;color:var(--ink2);margin-top:4px}
+.heroblob{position:absolute;right:-30px;top:-40px;width:150px;height:150px;border-radius:44% 56% 52% 48%;background:radial-gradient(circle at 30% 30%,rgba(138,134,248,.65),rgba(143,232,216,.35));filter:blur(8px);animation:morph 9s ease-in-out infinite alternate}
+@keyframes morph{0%{border-radius:44% 56% 52% 48%;transform:rotate(0)}100%{border-radius:58% 42% 40% 60%;transform:rotate(40deg)}}
+.cnt{position:relative;width:64px;height:64px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(255,255,255,.65);box-shadow:inset 0 1px 2px #fff,0 6px 16px rgba(79,70,216,.25)}
+.cnt b{font-family:var(--display);font-size:24px;line-height:1;font-weight:800;color:var(--indigo)}
+.cnt span{font-size:11px;font-weight:700;color:var(--ink2)}
+.list{position:relative;display:flex;flex-direction:column;gap:12px;padding-left:28px}
+.list::before{content:"";position:absolute;left:8px;top:20px;bottom:20px;width:3px;border-radius:2px;background:linear-gradient(180deg,rgba(79,70,216,.55),rgba(79,70,216,.1))}
+.item{position:relative}
+.item.fresh{animation:rise .5s cubic-bezier(.34,1.56,.64,1) both}
+@keyframes rise{from{opacity:0;transform:translateY(12px) scale(.96)}to{opacity:1;transform:none}}
+.dot{position:absolute;left:-26px;top:37px;width:14px;height:14px;border-radius:50%;background:rgba(255,255,255,.9);border:2px solid rgba(79,70,216,.4)}
+.dot.on{background:var(--indigo);border-color:#fff;box-shadow:0 0 0 4px rgba(79,70,216,.22)}
+.acard{min-height:88px;border-radius:26px;padding:8px 8px 8px 16px;display:flex;align-items:center;gap:8px}
+.acard.off{opacity:.7}
+.ainfo{flex:1;min-width:0;text-align:left;padding:4px 0}
+.atime{font-family:var(--display);font-size:30px;font-weight:700;letter-spacing:-.02em;line-height:1.05;font-variant-numeric:tabular-nums}
+.atime small{font-size:14px;font-weight:700;margin-left:3px;color:var(--ink2);letter-spacing:0}
+.alabel{font-size:14px;font-weight:500;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.arep{font-size:12px;font-weight:700;color:var(--indigo)}
+.tog{position:relative;width:52px;height:32px;border-radius:16px;border:1px solid var(--edge);background:rgba(110,108,150,.32);flex:none;transition:background .35s}
+.tog::after{content:"";position:absolute;inset:-8px}
+.tog i{position:absolute;top:2px;left:2px;width:26px;height:26px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(40,30,100,.35);transition:transform .5s cubic-bezier(.34,1.56,.64,1)}
+.tog[aria-checked="true"]{background:linear-gradient(90deg,#6f6cf0,#9a7cf6)}
+.tog[aria-checked="true"] i{transform:translateX(20px)}
+.pill{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:0 16px;border-radius:22px;font-family:var(--display);font-weight:700;font-size:15px;background:rgba(255,255,255,.6);border:1px solid var(--edge);box-shadow:inset 0 1px 1px #fff,0 4px 14px rgba(80,60,160,.12);transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+.pill:active{transform:scale(.94)}
+.pill.sel{background:linear-gradient(160deg,#7d7cf5,#4f46d8);color:#fff}
+.cta{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;gap:10px;min-height:58px;border-radius:29px;width:100%;color:#fff;font-family:var(--display);font-weight:700;font-size:18px;background:linear-gradient(150deg,#8a86f8,#4f46d8 60%,#7a52e6);border:1px solid rgba(255,255,255,.6);box-shadow:0 14px 30px rgba(79,70,216,.45),inset 0 2px 2px rgba(255,255,255,.6),inset 0 -10px 16px rgba(60,40,180,.3)}
+.cta::before{content:"";position:absolute;top:0;bottom:0;width:60px;left:-80px;background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent);animation:sweep 3.6s ease-in-out infinite}
+@keyframes sweep{0%{left:-80px}55%,100%{left:110%}}
+.cta[disabled]{opacity:.5}
+.ghost{display:flex;align-items:center;justify-content:center;gap:8px;min-height:48px;border-radius:24px;font-weight:700;width:100%;color:var(--coral);background:rgba(255,255,255,.5);border:1px solid var(--edge)}
+.empty{text-align:center;padding:24px;border-radius:30px;display:flex;flex-direction:column;align-items:center;gap:12px}
+.empty h3{font-family:var(--display);font-size:20px}
+.empty p{font-size:14px;color:var(--ink2);font-weight:500}
+.foot{font-size:12.5px;color:var(--ink2);text-align:center;font-weight:500;line-height:1.5;padding:0 8px}
+.foot button{color:var(--indigo);font-weight:700;text-decoration:underline;min-height:32px}
+.tabbar{position:absolute;left:16px;bottom:calc(20px + env(safe-area-inset-bottom,0px));width:calc(100% - 108px);height:68px;border-radius:34px;padding:6px;display:flex;gap:2px;z-index:5}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;height:54px;border-radius:27px;color:var(--ink2);font-size:11px;font-weight:700;transition:background .4s}
+.tab[aria-selected="true"]{color:#3a34c4;background:rgba(255,255,255,.8);box-shadow:inset 0 1px 1px #fff,0 4px 14px rgba(79,70,216,.28);animation:pop .55s cubic-bezier(.34,1.56,.64,1)}
+.fab{position:absolute;right:16px;bottom:calc(20px + env(safe-area-inset-bottom,0px));width:68px;height:68px;border-radius:50%;display:grid;place-items:center;color:#fff;z-index:5;background:linear-gradient(150deg,#8a86f8,#4f46d8 60%,#7a52e6);border:1px solid rgba(255,255,255,.6);box-shadow:0 12px 28px rgba(79,70,216,.5),inset 0 2px 2px rgba(255,255,255,.6),inset 0 -8px 14px rgba(60,40,180,.35);transition:transform .35s cubic-bezier(.34,1.56,.64,1)}
+.fab:active{transform:scale(.88) rotate(90deg)}
+/* calendar */
+.calcard{border-radius:30px;padding:10px 12px 12px;flex:none}
+.calhead{display:flex;align-items:center;justify-content:space-between;min-height:48px}
+.calhead h2{font-family:var(--display);font-size:20px;font-weight:700}
+.calgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));row-gap:2px}
+.wd{height:26px;display:grid;place-items:center;font-size:12px;font-weight:700;color:var(--ink2)}
+.cell{height:46px;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;font-family:var(--display);font-size:17px;font-weight:700;transition:background .3s}
+.cell em{display:flex;gap:2px;height:5px}
+.cell em i{width:5px;height:5px;border-radius:50%;background:var(--indigo)}
+.cell.today{color:var(--indigo)}
+.cell.on{background:linear-gradient(160deg,#7d7cf5,#4f46d8);color:#fff;animation:pop .5s cubic-bezier(.34,1.56,.64,1)}
+.cell.on em i{background:#fff}
+.dayhead{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 4px}
+.dayhead h2{font-family:var(--display);font-size:20px;font-weight:700}
+/* plans */
+.tl{position:relative;flex:none}
+.hrow{position:absolute;left:0;right:0;height:64px;border-top:1px solid rgba(74,72,104,.2)}
+.hrow span{position:absolute;left:0;top:-8px;width:52px;text-align:right;font-size:12px;font-weight:700;color:var(--ink2);background:transparent}
+.blk{position:absolute;border-radius:20px;padding:8px 12px;text-align:left;overflow:hidden;display:flex;flex-direction:column;gap:2px;border:1px solid var(--edge);box-shadow:0 8px 20px rgba(80,60,160,.14),inset 0 1px 1px rgba(255,255,255,.9)}
+.blk b{font-family:var(--display);font-size:16px;font-weight:700;display:flex;gap:6px;align-items:center}
+.blk span{font-size:12px;font-weight:500;color:var(--ink2)}
+.tone0{background:linear-gradient(135deg,rgba(138,134,248,.7),rgba(138,134,248,.36))}
+.tone1{background:linear-gradient(135deg,rgba(143,232,216,.8),rgba(143,232,216,.4))}
+.tone2{background:linear-gradient(135deg,rgba(255,199,160,.85),rgba(255,199,160,.42))}
+.nowline{position:absolute;height:2px;background:var(--coral);z-index:2}
+.nowline::before{content:"";position:absolute;left:-6px;top:-5px;width:12px;height:12px;border-radius:50%;background:var(--coral);box-shadow:0 0 0 5px rgba(232,85,122,.2)}
+/* timer */
+.vessel{position:relative;width:290px;height:290px;margin:4px auto 0;flex:none;border-radius:50%;background:linear-gradient(160deg,rgba(255,255,255,.7),rgba(255,255,255,.25));border:1px solid var(--edge);box-shadow:0 24px 50px rgba(80,60,180,.25),inset 0 2px 3px #fff,inset 0 -18px 30px rgba(255,255,255,.3)}
+.vessel canvas{position:absolute;inset:0;width:100%;height:100%}
+.vt{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--ink);transition:color .4s;padding:0 24px;text-align:center}
+.vt.lit{color:#fff;text-shadow:0 2px 12px rgba(30,20,110,.5)}
+.vt b{font-family:var(--display);font-size:64px;font-weight:800;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums}
+.vt span{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-top:6px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.tinputs{display:flex;gap:8px;padding:12px;border-radius:28px}
+.tinputs label{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;font-weight:700;color:var(--ink2)}
+.tinputs input{width:100%;height:56px;border-radius:18px;border:1px solid var(--edge);background:rgba(255,255,255,.6);text-align:center;font-family:var(--display);font-size:26px;font-weight:700;color:var(--ink)}
+.field{display:flex;align-items:center;gap:12px;min-height:56px;padding:0 18px;border-radius:26px}
+.field label{font-size:14px;font-weight:700;color:var(--ink2)}
+.field input,.field select{flex:1;min-width:0;border:0;background:transparent;font-size:16px;font-weight:500;outline:none;color:var(--ink)}
+.ctrl{display:flex;justify-content:center;align-items:center;gap:28px}
+.round{width:68px;height:68px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.6);border:1px solid var(--edge);box-shadow:inset 0 1px 1px #fff,0 8px 20px rgba(80,60,160,.15);font-family:var(--display);font-weight:700;font-size:16px;transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+.round:active{transform:scale(.9)}
+.round.main{width:92px;height:92px;color:#fff;background:linear-gradient(150deg,#8a86f8,#4f46d8 60%,#7a52e6);box-shadow:0 14px 30px rgba(79,70,216,.5),inset 0 2px 2px rgba(255,255,255,.6),inset 0 -10px 16px rgba(60,40,180,.3)}
+/* sheets */
+.scrim{position:absolute;inset:0;background:rgba(28,26,51,.32);z-index:20;animation:fade .3s both}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.sheet{position:absolute;left:0;right:0;bottom:0;top:28px;z-index:21;border-radius:32px 32px 0 0;background:linear-gradient(180deg,rgba(247,243,252,.96),rgba(239,233,247,.98));border:1px solid var(--edge);box-shadow:0 -20px 60px rgba(40,30,110,.3);display:flex;flex-direction:column;animation:up .5s cubic-bezier(.22,1.2,.36,1) both;overflow:hidden}
+@keyframes up{from{transform:translateY(100%)}to{transform:none}}
+.sheet-h{display:flex;align-items:center;justify-content:space-between;padding:12px 16px 4px;flex:none}
+.sheet-h h2{font-family:var(--display);font-size:20px;font-weight:800}
+.sheet-b{flex:1;overflow-y:auto;padding:8px 16px 32px;display:flex;flex-direction:column;gap:14px}
+.aibar{display:flex;align-items:center;gap:10px;min-height:56px;border-radius:28px;padding:0 6px 0 18px}
+.aibar input,.aibar textarea{flex:1;min-width:0;border:0;background:transparent;outline:none;font-size:15.5px;font-weight:500;resize:none}
+.hint{font-size:13px;font-weight:500;color:var(--ink2);padding:0 8px}
+.timein{width:100%;height:96px;border-radius:30px;text-align:center;font-family:var(--display);font-size:56px;font-weight:800;letter-spacing:-.02em;color:var(--ink);border:1px solid var(--edge);font-variant-numeric:tabular-nums}
+.pills{display:flex;justify-content:space-between;gap:4px}
+.dp{width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.6);border:1px solid var(--edge);font-family:var(--display);font-weight:700;font-size:15px;transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+.dp[aria-pressed="true"]{background:linear-gradient(160deg,#7d7cf5,#4f46d8);color:#fff;box-shadow:0 6px 16px rgba(79,70,216,.4);transform:scale(1.06)}
+.card{border-radius:28px;padding:16px 18px;display:flex;flex-direction:column;gap:12px}
+.opt{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:48px;font-weight:500;font-size:16px}
+.opt select,.opt input[type=date]{border:0;background:transparent;font-weight:700;color:var(--indigo);text-align:right;outline:none}
+.res{display:flex;align-items:center;gap:12px;min-height:68px;padding:0 6px 0 14px;border-radius:24px;animation:rise .45s cubic-bezier(.34,1.56,.64,1) both}
+.res .k{width:40px;height:40px;border-radius:14px;display:grid;place-items:center;color:var(--indigo);background:rgba(79,70,216,.14);flex:none}
+.res .t{flex:1;min-width:0}
+.res b{display:block;font-size:16px;font-weight:700}
+.res small{font-size:13px;font-weight:500;color:var(--ink2)}
+.res.gone{opacity:.5}
+.res.gone b{text-decoration:line-through}
+.ex{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:48px;padding:0 16px;border-radius:20px;font-weight:500;text-align:left;width:100%}
+.orb{width:52px;height:52px;border-radius:50%;flex:none;background:radial-gradient(circle at 35% 30%,#fff,#8a86f8 45%,#4f46d8 70%,#8fe8d8);box-shadow:0 6px 18px rgba(79,70,216,.45);animation:breathe 2.8s ease-in-out infinite}
+@keyframes breathe{50%{transform:scale(1.1)}}
+/* toast */
+.toasts{position:absolute;left:0;right:0;bottom:calc(104px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;align-items:center;gap:8px;z-index:30;pointer-events:none;padding:0 20px}
+.toast{pointer-events:auto;display:flex;align-items:center;gap:12px;padding:10px 12px 10px 18px;border-radius:26px;font-weight:600;font-size:15px;animation:up .45s cubic-bezier(.22,1.2,.36,1) both}
+.toast button{min-height:36px;padding:0 14px;border-radius:18px;color:#fff;background:var(--indigo);font-weight:700}
+/* saved */
+.saved{position:absolute;inset:0;z-index:40;display:grid;place-items:center;background:rgba(28,26,51,.14);animation:fade .25s both}
+.saved div{display:flex;flex-direction:column;align-items:center;gap:22px}
+.drop{position:relative;width:92px;height:92px}
+.drop i{position:absolute;inset:0;border-radius:50%;border:2px solid rgba(79,70,216,.5);animation:ripple 1.3s ease-out both}
+.drop i:nth-child(2){animation-delay:.18s}.drop i:nth-child(3){animation-delay:.36s}
+@keyframes ripple{from{transform:scale(.6);opacity:.9}to{transform:scale(2.6);opacity:0}}
+.drop u{position:absolute;inset:0;border-radius:50%;display:grid;place-items:center;color:#fff;text-decoration:none;background:linear-gradient(150deg,#8a86f8,#4f46d8);box-shadow:0 12px 30px rgba(79,70,216,.5);animation:land .55s cubic-bezier(.34,1.56,.64,1) both}
+@keyframes land{from{transform:scale(.2)}to{transform:scale(1)}}
+.saved p{font-family:var(--display);font-size:20px;font-weight:700;padding:10px 20px;border-radius:24px;animation:rise .5s .25s both}
+/* ringing */
+.ring{position:absolute;inset:0;z-index:50;color:#fff;background:#0c0a1f;display:flex;flex-direction:column;overflow:hidden;animation:fade .4s both}
+.ring .n1,.ring .n2,.ring .n3{position:absolute;border-radius:50%;filter:blur(50px);animation:drift 14s ease-in-out infinite alternate}
+.ring .n1{left:-80px;top:-60px;width:340px;height:340px;background:#4a3fd8;opacity:.75}
+.ring .n2{right:-100px;top:34%;width:300px;height:300px;background:#8b4fe0;opacity:.55;animation-duration:19s}
+.ring .n3{left:-40px;bottom:-40px;width:320px;height:320px;background:#ff7a6b;opacity:.4;animation-duration:23s}
+.rr{position:absolute;left:50%;top:38%;width:200px;height:200px;margin:-100px 0 0 -100px;border-radius:50%;border:2px solid rgba(180,170,255,.55);animation:rip 4.8s ease-out infinite}
+.rr:nth-of-type(2){animation-delay:-1.6s}.rr:nth-of-type(3){animation-delay:-3.2s}
+@keyframes rip{from{transform:scale(.6);opacity:.9}to{transform:scale(3.4);opacity:0}}
+.rbody{position:relative;flex:1;display:flex;flex-direction:column;padding:70px 16px 36px}
+.rtxt{text-align:center;display:flex;flex-direction:column;gap:8px;align-items:center}
+.rtxt .d{font-size:16px;font-weight:500;color:rgba(255,255,255,.8)}
+.rtxt .t{font-family:var(--display);font-size:112px;font-weight:800;letter-spacing:-.05em;line-height:1;text-shadow:0 8px 40px rgba(140,120,255,.7);font-variant-numeric:tabular-nums}
+.rtxt .t small{font-size:28px;letter-spacing:0;margin-left:6px}
+.rtxt .l{font-family:var(--display);font-size:26px;font-weight:700}
+.dg{background:linear-gradient(135deg,rgba(255,255,255,.22),rgba(255,255,255,.07));border:1px solid rgba(255,255,255,.3);-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px);box-shadow:inset 0 1px 1px rgba(255,255,255,.4),0 14px 34px rgba(0,0,0,.35)}
+.snz{display:flex;align-items:center;justify-content:center;gap:10px;min-height:64px;border-radius:32px;font-family:var(--display);font-size:17px;font-weight:700;width:100%;color:#fff}
+.trk{position:relative;height:76px;border-radius:38px;margin-top:14px;touch-action:none;user-select:none;-webkit-user-select:none}
+.trk span{position:absolute;inset:0;display:grid;place-items:center;padding-left:56px;font-family:var(--display);font-size:17px;font-weight:700;color:rgba(255,255,255,.8);pointer-events:none}
+.hnd{position:absolute;left:6px;top:6px;width:64px;height:64px;border-radius:50%;display:grid;place-items:center;color:#fff;background:linear-gradient(150deg,#ff9a7a,#ff5f7a);box-shadow:0 8px 22px rgba(255,95,122,.55),inset 0 2px 2px rgba(255,255,255,.6);touch-action:none;cursor:grab}
+@media (min-width:600px){.app{margin:16px auto;height:calc(100% - 32px);border-radius:40px;box-shadow:0 30px 80px rgba(40,30,110,.3)}}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+</style>
+<div class="app" id="app">
+  <div class="aurora" aria-hidden="true"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><div class="blob b4"></div></div>
+  <main class="screen" id="screen"></main>
+  <nav class="tabbar glass" id="tabs" role="tablist" aria-label="Main"></nav>
+  <button class="fab" data-act="new" aria-label="New alarm"></button>
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+  <div id="layer"></div>
+</div>
+<script>
+(() => {
+'use strict';
+/* ---------- helpers ---------- */
+const $ = (s, el = document) => el.querySelector(s);
+const uid = () => Math.random().toString(36).slice(2, 10);
+const pad = n => String(n).padStart(2, '0');
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const startOfDay = d => { const x = new Date(d); x.setHours(0, 0, 0, 0); return x; };
+const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
+const sameDay = (a, b) => a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+const dateKey = d => d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+const fromKey = k => { const [y, m, d] = k.split('-').map(Number); return new Date(y, m - 1, d); };
+const D3 = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const DL = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const ML = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const longDate = d => DL[d.getDay()] + ' ' + d.getDate() + ' ' + ML[d.getMonth()];
+const shortDate = d => D3[d.getDay()] + ' ' + d.getDate() + ' ' + ML[d.getMonth()].slice(0, 3);
+
+const ICONS = {
+  alarm: '<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M5 3.5 2 6.5M22 6.5l-3-3"/>',
+  cal: '<rect x="3" y="4.5" width="18" height="17" rx="3.5"/><path d="M16 2.5v4M8 2.5v4M3 10h18"/>',
+  plans: '<path d="M9 6h12M9 12h12M9 18h12M4 6h.01M4 12h.01M4 18h.01"/>',
+  timer: '<circle cx="12" cy="14" r="8"/><path d="M9.5 2.5h5M12 14l3.2-3.2"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>',
+  trash: '<path d="M4 7h16M9 7V4.5h6V7M6.5 7l.8 12.5h9.4L17.5 7M10 11v5M14 11v5"/>',
+  edit: '<path d="M4 20l1-4L16.5 4.5a2.1 2.1 0 013 3L8 19zM14.5 6.5l3 3"/>',
+  spark: '<path d="M12 3l1.9 5.6 5.6 1.9-5.6 1.9L12 18l-1.9-5.6-5.6-1.9 5.6-1.9zM19 16v4M17 18h4"/>',
+  mic: '<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0013 0M12 18v3"/>',
+  x: '<path d="M6 6l12 12M18 6L6 18"/>',
+  left: '<path d="M15 5l-7 7 7 7"/>',
+  right: '<path d="M9 5l7 7-7 7"/>',
+  bell: '<path d="M6 9a6 6 0 0112 0c0 6.5 2.5 8 2.5 8h-17S6 15.5 6 9M10 20.5a2 2 0 004 0"/>',
+  play: '<path d="M8 5.5v13l10.5-6.5z" fill="currentColor"/>',
+  pause: '<rect x="6.5" y="5" width="4" height="14" rx="1.2" fill="currentColor"/><rect x="13.5" y="5" width="4" height="14" rx="1.2" fill="currentColor"/>',
+  check: '<path d="M5 12.5l4.5 4.5L19 7"/>',
+  moon: '<path d="M20 14.5A8 8 0 019.5 4a8 8 0 1010.5 10.5z"/>',
+  arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>',
+  undo: '<path d="M9 14L4 9l5-5M4 9h10a6 6 0 010 12h-3"/>'
+};
+const ic = (n, s = 22, w = 1.8) => '<svg width="' + s + '" height="' + s + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="' + w + '" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + ICONS[n] + '</svg>';
+
+/* ---------- alarm model (mirrors WakeAlarm.swift) ---------- */
+const parts12 = a => ({ t: (a.hour % 12 || 12) + ':' + pad(a.minute), ap: a.hour < 12 ? 'AM' : 'PM' });
+const fullTime = a => { const p = parts12(a); return p.t + ' ' + p.ap; };
+const minsOf = a => a.hour * 60 + a.minute;
+function repeatText(a) {
+  if (!a.weekdays.length) return a.date ? shortDate(fromKey(a.date)) : 'Once';
+  const w = [...a.weekdays].sort((x, y) => x - y);
+  const k = w.join(',');
+  if (k === '1,2,3,4,5,6,7') return 'Every day';
+  if (k === '2,3,4,5,6') return 'Weekdays';
+  if (k === '1,7') return 'Weekends';
+  return w.map(n => D3[n - 1]).join(', ');
+}
+function rangeText(a) {
+  if (!a.duration) return fullTime(a);
+  const e = (minsOf(a) + a.duration) % 1440;
+  const end = { hour: Math.floor(e / 60), minute: e % 60 };
+  const s = fullTime(a), t = fullTime(end);
+  return (end.hour < 12) === (a.hour < 12) ? parts12(a).t + ' to ' + t : s + ' to ' + t;
+}
+const atTime = (day, a) => { const d = new Date(day); d.setHours(a.hour, a.minute, 0, 0); return d; };
+function nextFire(a, now = new Date()) {
+  const today = startOfDay(now);
+  if (a.weekdays.length) {
+    for (let o = 0; o < 8; o++) {
+      const day = addDays(today, o);
+      if (a.weekdays.includes(day.getDay() + 1)) { const f = atTime(day, a); if (f > now) return f; }
+    }
+    return null;
+  }
+  if (a.date) { const f = atTime(fromKey(a.date), a); return f > now ? f : null; }
+  const f = atTime(today, a);
+  return f > now ? f : atTime(addDays(today, 1), a);
+}
+function occursOn(a, day) {
+  if (a.weekdays.length) return a.weekdays.includes(day.getDay() + 1);
+  if (a.date) return a.date === dateKey(day);
+  const n = nextFire(a);
+  return !!n && sameDay(n, day);
+}
+const hasExpired = (a, now = new Date()) => !a.weekdays.length && !!a.date && atTime(fromKey(a.date), a) <= now;
+function countdown(sec) {
+  const t = Math.max(0, Math.round(sec)), h = Math.floor(t / 3600), m = Math.floor((t % 3600) / 60), s = t % 60;
+  if (h > 0) return h + ' h ' + pad(m) + ' min';
+  if (m > 0) return m + ' min';
+  return s + ' s';
+}
+function clock(sec) {
+  const t = Math.max(0, Math.ceil(sec)), h = Math.floor(t / 3600), m = Math.floor((t % 3600) / 60), s = t % 60;
+  return h > 0 ? h + ':' + pad(m) + ':' + pad(s) : m + ':' + pad(s);
+}
+
+/* ---------- sentence parser (web port of IntentParser.swift) ---------- */
+const rx = (p, f = 'i') => new RegExp(p, f);
+const strip = s => {
+  const pats = [
+    '(\\d+(?:\\.\\d+)?)\\s*-?\\s*(hours?|hrs?|hr|h|minutes?|mins?|min|m|seconds?|secs?|sec|s)\\b',
+    '\\b(?:an?|one)\\s+(?:hour|minute)\\b', '\\b\\d{1,2}(?::\\d{2})?\\s*(?:am|pm)\\b', '\\b\\d{1,2}:\\d{2}\\b', '\\bat\\s+\\d{1,2}\\b',
+    '\\b(?:noon|midnight|tomorrow|today|tonight|daily|everyday|every\\s*day|each day|weekdays?|weekends?)\\b',
+    '\\b(?:sun|mon|tues?|wed|thu(?:rs?)?|fri|sat)(?:day|nesday|sday|rsday|urday)?s?\\b',
+    '\\b(?:at|on|every|each|in|after|before|later|afterwards)\\b',
+    '\\b(?:please|set|create|add|make|schedule|start|an?|the|new|alarms?|timer|countdown|gentle|wake me up|wake me|wake up|remind me to|remind me|reminder|for|to|me|my)\\b'
+  ];
+  let t = s;
+  for (const p of pats) t = t.replace(rx(p, 'gi'), ' ');
+  return t.split(/\s+/).filter(Boolean).join(' ').trim();
+};
+const cap = s => s ? s[0].toUpperCase() + s.slice(1) : s;
+function splitClauses(text) {
+  const s = text.replace(/a\.m\./gi, 'am').replace(/p\.m\./gi, 'pm');
+  return s.split(/\s*(?:,|;|\.\s|\.$)\s*|\s+(?:and|then|also|plus)\s+/i)
+    .map(x => (x || '').trim().replace(/^(?:and|then|also|plus)\s+/i, '').trim()).filter(Boolean);
+}
+function extractTime(c) {
+  const lower = c.toLowerCase();
+  if (rx('\\bnoon\\b').test(c)) return { hour: 12, minute: 0 };
+  if (rx('\\bmidnight\\b').test(c)) return { hour: 0, minute: 0 };
+  let m = c.match(rx('\\b(\\d{1,2})(?::(\\d{2}))?\\s*(am|pm)\\b'));
+  if (m) {
+    let h = +m[1]; const mi = m[2] ? +m[2] : 0; const pm = m[3].toLowerCase() === 'pm';
+    if (!(h >= 1 && h <= 12 && mi >= 0 && mi <= 59)) return null;
+    if (pm) { if (h < 12) h += 12; } else if (h === 12) h = 0;
+    return { hour: h, minute: mi };
+  }
+  let hour = null, minute = 0;
+  m = c.match(rx('\\b(\\d{1,2}):(\\d{2})\\b'));
+  if (m) { hour = +m[1]; minute = +m[2]; }
+  else {
+    m = c.match(rx('\\bat\\s+(\\d{1,2})\\b(?!\\s*(?:hours?|hrs?|minutes?|mins?|seconds?|secs?))'));
+    if (m) hour = +m[1];
+  }
+  if (hour === null || hour < 0 || hour > 23 || minute > 59) return null;
+  let h = hour;
+  if (h >= 1 && h <= 12) {
+    const wantsPM = ['lunch', 'dinner', 'afternoon', 'evening', 'tonight', 'night', 'supper'].some(w => lower.includes(w));
+    if (wantsPM && h < 12) h += 12;
+    else if (h === 12 && lower.includes('morning')) h = 0;
+  }
+  return { hour: h, minute };
+}
+function extractDuration(c) {
+  const m = c.match(rx('(\\d+(?:\\.\\d+)?)\\s*-?\\s*(hours?|hrs?|hr|h|minutes?|mins?|min|m|seconds?|secs?|sec|s)\\b|\\b(?:an?|one)\\s+(hour|minute)\\b'));
+  if (!m) return null;
+  let v, u;
+  if (m[1] && m[2]) { v = parseFloat(m[1]); u = m[2].toLowerCase(); }
+  else if (m[3]) { v = 1; u = m[3].toLowerCase(); }
+  else return null;
+  const seconds = u.startsWith('h') ? v * 3600 : u.startsWith('m') ? v * 60 : v;
+  const before = c.slice(0, m.index).toLowerCase().trim();
+  return { seconds, relative: before.endsWith(' in') || before === 'in' };
+}
+const NAMES = [['sunday', 'sun', 1], ['monday', 'mon', 2], ['tuesday', 'tue|tues', 3], ['wednesday', 'wed', 4], ['thursday', 'thu|thur|thurs', 5], ['friday', 'fri', 6], ['saturday', 'sat', 7]];
+function extractDays(c, now) {
+  const today = startOfDay(now);
+  if (rx('\\bweekdays?\\b').test(c)) return { weekdays: [2, 3, 4, 5, 6], date: null };
+  if (rx('\\bweekends?\\b').test(c)) return { weekdays: [1, 7], date: null };
+  if (rx('\\b(?:every\\s*day|everyday|daily|each day)\\b').test(c)) return { weekdays: [1, 2, 3, 4, 5, 6, 7], date: null };
+  const found = []; let plural = false;
+  for (const [full, abbr, num] of NAMES) {
+    if (rx('\\b' + full + 's\\b').test(c)) { found.push(num); plural = true; }
+    else if (rx('\\b' + full + '\\b').test(c)) found.push(num);
+    else if (rx('\\b(?:on|every|each)\\s+(?:' + abbr + ')\\b').test(c)) found.push(num);
+  }
+  if (found.length) {
+    const repeating = plural || rx('\\b(?:every|each)\\b').test(c) || found.length > 1;
+    if (repeating) return { weekdays: found, date: null };
+    const target = found[0], t = extractTime(c);
+    for (let o = 0; o < 8; o++) {
+      const day = addDays(today, o);
+      if (day.getDay() + 1 !== target) continue;
+      if (o === 0 && t && atTime(day, { hour: t.hour, minute: t.minute }) <= now) continue;
+      return { weekdays: [], date: day };
+    }
+  }
+  if (rx('\\btomorrow\\b').test(c)) return { weekdays: [], date: addDays(today, 1) };
+  if (rx('\\b(?:today|tonight)\\b').test(c)) return { weekdays: [], date: today };
+  return { weekdays: [], date: null };
+}
+function extractLabel(c, fallback) {
+  const marker = rx('\\b(?:labell?ed|label|for|to|about|called|named|of)\\s+(?:the\\s+|my\\s+|a\\s+|an\\s+)?(.+?)(?=\\s+(?:at|on|every|each|in|tomorrow|today|tonight|daily|weekdays?|weekends?|after|before|by|from)\\b|$)');
+  const m = c.match(marker);
+  if (m && strip(m[1])) return cap(m[1].trim());
+  const rest = strip(c);
+  return rest ? cap(rest) : fallback;
+}
+function parseClause(c, now) {
+  const lower = c.toLowerCase();
+  const days = extractDays(c, now), dur = extractDuration(c);
+  const timerWord = lower.includes('timer') || lower.includes('countdown');
+  if (dur && (timerWord || (lower.includes('nap') && !lower.includes(' in ')))) {
+    return { kind: 'timer', label: extractLabel(c, 'Timer'), duration: dur.seconds };
+  }
+  if (dur && dur.relative) {
+    const fire = new Date(now.getTime() + dur.seconds * 1000);
+    return { kind: 'alarm', label: extractLabel(c, lower.includes('wake') ? 'Wake up' : 'Alarm'), hour: fire.getHours(), minute: fire.getMinutes(), weekdays: [], date: startOfDay(fire) };
+  }
+  const t = extractTime(c);
+  if (!t) return null;
+  let date = days.date;
+  if (!days.weekdays.length && !date && lower.includes('tonight')) date = startOfDay(now);
+  return { kind: 'alarm', label: extractLabel(c, lower.includes('wake') ? 'Wake up' : 'Alarm'), hour: t.hour, minute: t.minute, weekdays: days.weekdays, date };
+}
+const parseSentence = (text, now = new Date()) => splitClauses(text).map(c => parseClause(c, now)).filter(Boolean);
+const intentAlarm = i => ({ id: uid(), label: i.label, hour: i.hour, minute: i.minute, weekdays: [...i.weekdays], date: (!i.weekdays.length && i.date) ? dateKey(i.date) : null, enabled: true, snooze: 9, duration: 0 });
+function intentTitle(i) { return i.kind === 'alarm' ? fullTime(i) + ', ' + i.label : countdown(i.duration) + ' timer, ' + i.label; }
+function intentSub(i) {
+  if (i.kind === 'timer') return 'Starts when you confirm';
+  if (i.weekdays.length) return repeatText(intentAlarm(i));
+  if (i.date) { const n = startOfDay(new Date()); if (sameDay(i.date, n)) return 'Today'; if (sameDay(i.date, addDays(n, 1))) return 'Tomorrow'; return shortDate(i.date); }
+  return 'Next time it reaches ' + fullTime(i);
+}
+window.__waketideParse = parseSentence;
+
+/* ---------- sound and haptics ---------- */
+let actx = null;
+function audio() {
+  try {
+    if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+    if (actx.state === 'suspended') actx.resume();
+  } catch (e) { actx = null; }
+  return actx;
+}
+function tone(freq, dur = 0.12, type = 'sine', gain = 0.12, when = 0, slideTo = null) {
+  const a = audio(); if (!a) return;
+  const t0 = a.currentTime + when, o = a.createOscillator(), g = a.createGain();
+  o.type = type; o.frequency.setValueAtTime(freq, t0);
+  if (slideTo) o.frequency.exponentialRampToValueAtTime(slideTo, t0 + dur);
+  g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(gain, t0 + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+  o.connect(g); g.connect(a.destination); o.start(t0); o.stop(t0 + dur + 0.02);
+}
+const buzz = p => { try { if (navigator.vibrate) navigator.vibrate(p); } catch (e) { /* not supported */ } };
+const fx = {
+  tick() { tone(1400, 0.03, 'triangle', 0.05); buzz(6); },
+  on() { tone(660, 0.1, 'sine', 0.12, 0, 990); buzz(14); },
+  off() { tone(520, 0.12, 'sine', 0.1, 0, 330); buzz(8); },
+  saved() { [523, 659, 784, 1047].forEach((f, i) => tone(f, 0.22, 'sine', 0.1, i * 0.08)); buzz([20, 40, 30]); },
+  del() { tone(220, 0.14, 'triangle', 0.1, 0, 110); buzz(16); },
+  warn() { tone(300, 0.15, 'square', 0.05); buzz([10, 30, 10]); }
+};
+let alarmSoundTimer = null, alarmSoundStart = 0;
+function startAlarmSound() {
+  stopAlarmSound(); alarmSoundStart = Date.now();
+  const beat = () => {
+    const rise = Math.min(1, (Date.now() - alarmSoundStart) / 30000);
+    const g = 0.06 + 0.3 * rise;
+    tone(880, 0.35, 'sine', g); tone(1108, 0.35, 'sine', g, 0.22); tone(1318, 0.5, 'sine', g, 0.44);
+    buzz([300, 150, 300]);
+  };
+  beat(); alarmSoundTimer = setInterval(beat, 1500);
+}
+function stopAlarmSound() { if (alarmSoundTimer) clearInterval(alarmSoundTimer); alarmSoundTimer = null; buzz(0); }
+document.addEventListener('pointerdown', () => audio(), { once: true });
+
+/* ---------- state ---------- */
+const KEY = 'waketide.web.v2';
+const mk = (label, hour, minute, weekdays, date, enabled, duration) => ({ id: uid(), label, hour, minute, weekdays, date, enabled, snooze: 9, duration });
+const seed = () => ({
+  alarms: [
+    mk('Medicine', 1, 30, [1, 2, 3, 4, 5, 6, 7], null, true, 0),
+    mk('Get ready for office', 5, 30, [2, 3, 4, 5, 6], null, true, 90),
+    mk('AI Seminar', 10, 0, [], dateKey(new Date()), true, 105),
+    mk('Lunch out', 12, 0, [2, 3, 4, 5, 6], null, true, 60)
+  ],
+  timer: null, snoozes: []
+});
+function load() {
+  try { const raw = localStorage.getItem(KEY); if (raw) { const s = JSON.parse(raw); if (s && Array.isArray(s.alarms)) { s.snoozes = s.snoozes || []; return s; } } } catch (e) { /* storage blocked */ }
+  return seed();
+}
+function persist() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* storage blocked */ } }
+let state = load();
+const ui = { tab: 'week', weekSel: startOfDay(new Date()), month: new Date(new Date().getFullYear(), new Date().getMonth(), 1), monthSel: startOfDay(new Date()), planSel: startOfDay(new Date()), draft: { h: 0, m: 5, s: 0, label: 'Timer' }, undo: null };
+const $screen = $('#screen'), $layer = $('#layer'), $toasts = $('#toasts');
+const byTime = (a, b) => minsOf(a) - minsOf(b) || a.label.localeCompare(b.label);
+const findAlarm = id => state.alarms.find(a => a.id === id);
+function expireOneOffs() {
+  let ch = false;
+  state.alarms.forEach(a => { if (a.enabled && hasExpired(a)) { a.enabled = false; ch = true; } });
+  if (ch) persist();
+}
+function upsert(a) {
+  const i = state.alarms.findIndex(x => x.id === a.id);
+  if (i >= 0) state.alarms[i] = a; else state.alarms.push(a);
+  state.alarms.sort(byTime); persist();
+}
+function nextAlarm() {
+  let best = null;
+  for (const a of state.alarms) { if (!a.enabled) continue; const f = nextFire(a); if (f && (!best || f < best.f)) best = { a, f }; }
+  return best;
+}
+
+/* ---------- toasts ---------- */
+function toast(text, undoFn) {
+  const el = document.createElement('div');
+  el.className = 'toast glass';
+  el.innerHTML = '<span>' + esc(text) + '</span>' + (undoFn ? '<button data-act="undo">Undo</button>' : '');
+  if (undoFn) el.querySelector('button').addEventListener('click', () => { undoFn(); el.remove(); });
+  $toasts.replaceChildren(el);
+  setTimeout(() => el.remove(), undoFn ? 6000 : 3200);
+}
+
+/* ---------- screens ---------- */
+const header = (title, extra = '') => '<div class="hdr"><h1 class="ttl">' + title + '</h1><div class="hbtns">' + extra + '<button class="ib" data-act="ai" aria-label="Ask Waketide">' + ic('spark') + '</button></div></div>';
+function alarmCard(a, i, fresh) {
+  const p = parts12(a);
+  const label = 'Alarm ' + fullTime(a) + ', ' + a.label + ', ' + repeatText(a) + ', ' + (a.enabled ? 'on' : 'off');
+  return '<div class="item' + (fresh ? ' fresh' : '') + '" style="animation-delay:' + (i * 45) + 'ms" data-card="' + a.id + '"><i class="dot' + (a.enabled ? ' on' : '') + '"></i>' +
+    '<div class="acard glass' + (a.enabled ? '' : ' off') + '">' +
+    '<button class="ainfo" data-act="edit" data-id="' + a.id + '" aria-label="' + esc(label) + '"><span class="atime" style="display:block">' + p.t + '<small>' + p.ap + '</small></span><span class="alabel" style="display:block">' + esc(a.label) + '</span><span class="arep" style="display:block">' + esc(repeatText(a)) + '</span></button>' +
+    '<button class="tog" role="switch" aria-checked="' + a.enabled + '" aria-label="Alarm ' + esc(a.label) + '" data-act="toggle" data-id="' + a.id + '"><i></i></button>' +
+    '<button class="ib" data-act="edit" data-id="' + a.id + '" aria-label="Edit ' + esc(a.label) + '">' + ic('edit', 20) + '</button>' +
+    '<button class="ib" data-act="del" data-id="' + a.id + '" aria-label="Delete ' + esc(a.label) + '">' + ic('trash', 20) + '</button></div></div>';
+}
+const alarmList = (list, fresh) => '<div class="list">' + list.map((a, i) => alarmCard(a, i, fresh)).join('') + '</div>';
+const emptyCard = (title, dateForNew) => '<div class="empty glass"><div style="color:var(--indigo)">' + ic('moon', 34) + '</div><h3>' + esc(title) + '</h3><p>Add an alarm, or just say it and Waketide sets it up.</p><div class="chips"><button class="pill" data-act="new"' + (dateForNew ? ' data-date="' + dateForNew + '"' : '') + '>' + ic('plus', 18, 2.2) + 'Add alarm</button><button class="pill" data-act="ai">' + ic('spark', 18) + 'Say it</button></div></div>';
+
+function heroHTML() {
+  const n = nextAlarm(), on = state.alarms.filter(a => a.enabled).length;
+  const left = n ? n.a.label + ', in ' + countdown((n.f - Date.now()) / 1000) : 'Turn one on or add a new one';
+  return '<div class="heroblob"></div><div style="position:relative"><div class="eyebrow">Next alarm</div><div class="big">' + (n ? fullTime(n.a) : 'No alarms on') + '</div><div class="sub">' + esc(left) + '</div></div>' +
+    '<div class="cnt" role="img" aria-label="' + on + ' alarms on"><b>' + on + '</b><span>on</span></div>';
+}
+function weekDays() { const t = startOfDay(new Date()), s = addDays(t, -((t.getDay() + 6) % 7)); return [...Array(7)].map((_, i) => addDays(s, i)); }
+function dayStrip(days, sel, act) {
+  return '<div class="days glass" role="group" aria-label="Day of the week">' + days.map(d => {
+    const on = sameDay(d, sel), has = state.alarms.some(a => occursOn(a, d));
+    return '<button class="day' + (on ? ' on' : '') + '" data-act="' + act + '" data-day="' + dateKey(d) + '" aria-pressed="' + on + '" aria-label="' + longDate(d) + '"><span>' + D3[d.getDay()] + '</span><b>' + d.getDate() + '</b><i class="pip' + (has ? ' y' : '') + '"></i></button>';
+  }).join('') + '</div>';
+}
+function renderWeek(fresh) {
+  const sel = ui.weekSel, list = state.alarms.filter(a => occursOn(a, sel)).sort(byTime);
+  const isToday = sameDay(sel, new Date());
+  return header('Your Week') + dayStrip(weekDays(), sel, 'weekday') + '<div class="hero glass" id="hero">' + heroHTML() + '</div>' +
+    (list.length ? alarmList(list, fresh) : emptyCard('Nothing set for ' + DL[sel.getDay()], isToday ? '' : dateKey(sel))) +
+    '<p class="foot">Web preview: alarms ring only while this page stays open. The iPhone app uses AlarmKit and rings anywhere, even on silent.<br><button data-act="testring">Preview the ringing screen</button> · <button data-act="reset">Reset sample alarms</button></p>';
+}
+function renderSchedule(fresh) {
+  const m = ui.month, first = new Date(m.getFullYear(), m.getMonth(), 1), count = new Date(m.getFullYear(), m.getMonth() + 1, 0).getDate();
+  const lead = (first.getDay() + 6) % 7;
+  let cells = '';
+  for (let i = 0; i < lead; i++) cells += '<div></div>';
+  for (let d = 1; d <= count; d++) {
+    const day = new Date(m.getFullYear(), m.getMonth(), d), n = state.alarms.filter(a => occursOn(a, day)).length;
+    const cls = 'cell' + (sameDay(day, ui.monthSel) ? ' on' : '') + (sameDay(day, new Date()) ? ' today' : '');
+    cells += '<button class="' + cls + '" data-act="monthday" data-day="' + dateKey(day) + '" aria-pressed="' + sameDay(day, ui.monthSel) + '" aria-label="' + longDate(day) + (n ? ', ' + n + (n === 1 ? ' alarm' : ' alarms') : '') + '"><span>' + d + '</span><em>' + '<i></i>'.repeat(Math.min(n, 3)) + '</em></button>';
+  }
+  const list = state.alarms.filter(a => occursOn(a, ui.monthSel)).sort(byTime);
+  return header('Schedule') +
+    '<div class="calcard glass"><div class="calhead"><button class="ib" data-act="prevmonth" aria-label="Previous month">' + ic('left', 20) + '</button><h2>' + ML[m.getMonth()] + ' ' + m.getFullYear() + '</h2><button class="ib" data-act="nextmonth" aria-label="Next month">' + ic('right', 20) + '</button></div>' +
+    '<div class="calgrid">' + ['M', 'T', 'W', 'T', 'F', 'S', 'S'].map(w => '<div class="wd">' + w + '</div>').join('') + cells + '</div></div>' +
+    '<div class="dayhead"><h2>' + longDate(ui.monthSel) + '</h2><button class="pill" data-act="new" data-date="' + dateKey(ui.monthSel) + '">' + ic('plus', 18, 2.2) + 'Add</button></div>' +
+    (list.length ? alarmList(list, fresh) : '<div class="empty glass"><p>No alarms on this date.</p></div>');
+}
+const HOUR_H = 64;
+function renderPlans() {
+  const sel = ui.planSel, list = state.alarms.filter(a => occursOn(a, sel)).sort(byTime), isToday = sameDay(sel, new Date());
+  const eff = a => Math.max(a.duration, 40), ends = [], placed = [];
+  list.forEach(a => {
+    const s = minsOf(a); let idx = ends.findIndex(e => e <= s);
+    if (idx < 0) { ends.push(0); idx = ends.length - 1; }
+    ends[idx] = s + eff(a); placed.push({ a, col: idx });
+  });
+  const cols = Math.max(1, ends.length), pct = 100 / cols;
+  let rows = '';
+  for (let h = 0; h < 24; h++) rows += '<div class="hrow" style="top:' + h * HOUR_H + 'px"><span>' + ((h % 12) || 12) + ' ' + (h < 12 ? 'AM' : 'PM') + '</span></div>';
+  const blocks = placed.map(({ a, col }, i) => {
+    const top = minsOf(a) / 60 * HOUR_H + 2, h = Math.max(44, a.duration / 60 * HOUR_H - 4);
+    return '<button class="blk tone' + (i % 3) + '" data-act="edit" data-id="' + a.id + '" style="top:' + top + 'px;height:' + h + 'px;left:calc(64px + (100% - 64px) * ' + (col / cols) + ');width:calc((100% - 64px) * ' + (1 / cols) + ' - 6px);opacity:' + (a.enabled ? 1 : .6) + '" aria-label="' + esc(fullTime(a) + ', ' + a.label) + '"><b>' + ic(a.enabled ? 'bell' : 'moon', 14, 2.2) + '<span style="font:inherit;color:inherit;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + esc(a.label) + '</span></b><span>' + esc(rangeText(a)) + '</span></button>';
+  }).join('');
+  const now = new Date(), nowTop = (now.getHours() * 60 + now.getMinutes()) / 60 * HOUR_H;
+  return header('Plans') +
+    '<div class="dayhead"><button class="ib" data-act="prevday" aria-label="Previous day">' + ic('left', 20) + '</button><div style="text-align:center"><h2 style="font-size:20px">' + DL[sel.getDay()] + '</h2><div style="font-size:13px;color:var(--ink2);font-weight:500">' + sel.getDate() + ' ' + ML[sel.getMonth()] + '</div></div>' +
+    (isToday ? '<button class="ib" data-act="nextday" aria-label="Next day">' + ic('right', 20) + '</button>' : '<button class="pill" data-act="today">Today</button>') + '</div>' +
+    '<div class="tl" id="tl" style="height:' + 24 * HOUR_H + 'px">' + rows + blocks + (isToday ? '<div class="nowline" style="top:' + nowTop + 'px;left:58px;right:0"></div>' : '') + '</div>';
+}
+
+/* timer */
+const tRemaining = () => { const t = state.timer; if (!t) return 0; if (t.left != null) return t.left; return Math.max(0, (t.end - Date.now()) / 1000); };
+const tFinished = () => { const t = state.timer; return !!t && t.left == null && Date.now() >= t.end; };
+const chosenSeconds = () => ui.draft.h * 3600 + ui.draft.m * 60 + ui.draft.s;
+function renderTimer() {
+  const t = state.timer, fin = tFinished(), rem = t ? tRemaining() : chosenSeconds();
+  const caption = !t ? (ui.draft.label || 'Timer') : fin ? "Time's up" : (t.left != null ? 'Paused' : t.label);
+  const vessel = '<div class="vessel" role="timer" aria-label="' + (t ? (fin ? 'Time is up' : countdown(rem) + ' remaining') : 'Timer set for ' + countdown(rem)) + '"><canvas id="vessel" width="580" height="580"></canvas><div class="vt" id="vt"><b id="vtime">' + clock(rem) + '</b><span id="vcap">' + esc(caption) + '</span></div></div>';
+  let body;
+  if (!t) {
+    const presets = [[60, '1 min'], [300, '5 min'], [600, '10 min'], [1500, '25 min']];
+    body = '<div class="chips">' + presets.map(([s, l]) => '<button class="pill' + (chosenSeconds() === s ? ' sel' : '') + '" data-act="preset" data-s="' + s + '">' + l + '</button>').join('') + '</div>' +
+      '<div class="tinputs glass"><label>h<input id="th" type="number" inputmode="numeric" min="0" max="23" value="' + ui.draft.h + '" aria-label="Hours"></label><label>min<input id="tm" type="number" inputmode="numeric" min="0" max="59" value="' + ui.draft.m + '" aria-label="Minutes"></label><label>s<input id="ts" type="number" inputmode="numeric" min="0" max="59" value="' + ui.draft.s + '" aria-label="Seconds"></label></div>' +
+      '<div class="field glass"><label for="tl-label">Label</label><input id="tl-label" type="text" value="' + esc(ui.draft.label) + '" placeholder="Timer"></div>' +
+      '<button class="cta" data-act="tstart" ' + (chosenSeconds() < 1 ? 'disabled' : '') + '>Start</button>';
+  } else if (fin) {
+    body = '<button class="cta" data-act="tdone">' + ic('check', 22, 2.4) + 'Done</button>';
+  } else {
+    body = '<div class="ctrl"><button class="round" data-act="tcancel" aria-label="Cancel timer">' + ic('x', 26, 2) + '</button><button class="round main" data-act="tpause" aria-label="' + (t.left != null ? 'Resume timer' : 'Pause timer') + '">' + ic(t.left != null ? 'play' : 'pause', 34) + '</button><button class="round" data-act="tplus" aria-label="Add one minute">+1</button></div>';
+  }
+  return header('Timer') + vessel + body + '<p class="foot">On iPhone the timer keeps counting on the Lock Screen and in the Dynamic Island.</p>';
+}
+function startTimer(label, seconds) {
+  if (seconds < 1) return;
+  state.timer = { id: uid(), label: label || 'Timer', total: seconds, end: Date.now() + seconds * 1000, left: null }; persist();
+}
+function drawVessel(ts) {
+  const c = $('#vessel'); if (!c) return;
+  const t = state.timer, fin = tFinished();
+  const level = !t ? 0.7 : fin ? 0 : Math.min(1, tRemaining() / t.total);
+  const g = c.getContext('2d'), S = c.width, T = ts / 1000;
+  g.clearRect(0, 0, S, S); g.save(); g.beginPath(); g.arc(S / 2, S / 2, S / 2 - 18, 0, Math.PI * 2); g.clip();
+  const base = S * (1 - level);
+  const wave = (phase, amp, fill) => { g.beginPath(); g.moveTo(0, S); g.lineTo(0, base); for (let x = 0; x <= S; x += 6) g.lineTo(x, base + Math.sin(phase + x / S * Math.PI * 3) * amp); g.lineTo(S, S); g.closePath(); g.fillStyle = fill; g.fill(); };
+  const grad = g.createLinearGradient(0, base, 0, S); grad.addColorStop(0, '#8a86f8'); grad.addColorStop(1, '#4f46d8');
+  wave(-T * 1.1 + 1.5, 18, 'rgba(143,232,216,.75)'); wave(T * 1.5, 14, grad);
+  g.restore();
+  const vt = $('#vt'); if (vt) vt.classList.toggle('lit', level > 0.5);
+  if (t && !fin) { const b = $('#vtime'); if (b) b.textContent = clock(tRemaining()); }
+}
+function loop(ts) { if (ui.tab === 'timer') { drawVessel(ts); if (state.timer && tFinished() && !state.timer.notified) timerDone(); } requestAnimationFrame(loop); }
+function timerDone() {
+  state.timer.notified = true; persist();
+  startAlarmSound(); render();
+  openRing({ kind: 'timer', label: state.timer.label });
+}
+
+/* ---------- render ---------- */
+const TABS = [['week', 'Week', 'alarm'], ['schedule', 'Schedule', 'cal'], ['plans', 'Plans', 'plans'], ['timer', 'Timer', 'timer']];
+$('#tabs').innerHTML = TABS.map(([k, l, i]) => '<button class="tab" role="tab" data-act="tab" data-tab="' + k + '">' + ic(i) + '<span>' + l + '</span></button>').join('');
+$('.fab').innerHTML = ic('plus', 30, 2.2);
+function render(fresh = false) {
+  const st = $screen.scrollTop;
+  $screen.innerHTML = ui.tab === 'week' ? renderWeek(fresh) : ui.tab === 'schedule' ? renderSchedule(fresh) : ui.tab === 'plans' ? renderPlans() : renderTimer();
+  $screen.scrollTop = fresh ? 0 : st;
+  document.querySelectorAll('#tabs .tab').forEach(b => b.setAttribute('aria-selected', String(b.dataset.tab === ui.tab)));
+  if (fresh && ui.tab === 'plans') {
+    const list = state.alarms.filter(a => occursOn(a, ui.planSel));
+    const h = list.length ? Math.max(0, Math.min(...list.map(a => a.hour)) - 1) : (sameDay(ui.planSel, new Date()) ? Math.max(0, new Date().getHours() - 1) : 6);
+    $screen.scrollTop = h * HOUR_H;
+  }
+}
+
+/* ---------- sheets ---------- */
+let editor = null, ai = null, ringing = null;
+const fired = {};
+function closeSheet() { $layer.innerHTML = ''; editor = null; ai = null; }
+function sheetShell(title, body, label) {
+  $layer.innerHTML = '<div class="scrim" data-act="closesheet"></div><section class="sheet" role="dialog" aria-modal="true" aria-label="' + esc(label || title) + '"><div class="sheet-h"><h2>' + esc(title) + '</h2><button class="ib" data-act="closesheet" aria-label="Close">' + ic('x') + '</button></div><div class="sheet-b">' + body + '</div></section>';
+  const b = $('.sheet-h .ib'); if (b) b.focus({ preventScroll: true });
+}
+function openEditor(alarm, presetDate) {
+  const a = alarm ? JSON.parse(JSON.stringify(alarm)) : { id: uid(), label: 'Alarm', hour: 7, minute: 0, weekdays: [], date: presetDate || null, enabled: true, snooze: 9, duration: 0 };
+  editor = { a, isNew: !alarm, hasDate: !!a.date };
+  const pills = [2, 3, 4, 5, 6, 7, 1].map(n => '<button class="dp" data-act="edday" data-n="' + n + '" aria-pressed="' + a.weekdays.includes(n) + '" aria-label="' + DL[n - 1] + '">' + DL[n - 1][0] + '</button>').join('');
+  const durs = [0, 15, 30, 45, 60, 90, 120, 180].map(m => '<option value="' + m + '"' + (a.duration === m ? ' selected' : '') + '>' + (m === 0 ? 'None' : m < 60 ? m + ' min' : (m % 60 === 0 ? m / 60 + ' h' : Math.floor(m / 60) + ' h ' + (m % 60) + ' min')) + '</option>').join('');
+  const snz = [5, 9, 10, 15].map(m => '<option value="' + m + '"' + (a.snooze === m ? ' selected' : '') + '>' + m + ' min</option>').join('');
+  const body = '<div class="aibar glass">' + '<span style="color:var(--indigo);display:grid">' + ic('spark') + '</span><input id="ed-ai" type="text" placeholder="Say it: wake me at 6:30 on weekdays" enterkeyhint="go" aria-label="Describe the alarm"><button class="ib" data-act="edai" aria-label="Fill from sentence">' + ic('arrow') + '</button></div><p class="hint" id="ed-hint" hidden></p>' +
+    '<input id="ed-time" class="timein glass" type="time" value="' + pad(a.hour) + ':' + pad(a.minute) + '" aria-label="Time">' +
+    '<div class="card glass"><span class="eyebrow">Repeat</span><div class="pills" role="group" aria-label="Repeat on">' + pills + '</div>' +
+    '<div id="ed-once"' + (a.weekdays.length ? ' hidden' : '') + '><div class="opt"><label for="ed-hasdate">Specific date</label><button class="tog" id="ed-hasdate" role="switch" data-act="edhasdate" aria-checked="' + editor.hasDate + '"><i></i></button></div>' +
+    '<div class="opt" id="ed-daterow"' + (editor.hasDate ? '' : ' hidden') + '><label for="ed-date">Date</label><input id="ed-date" type="date" value="' + (a.date || dateKey(new Date())) + '"></div>' +
+    '<p class="hint" id="ed-oncehint"' + (editor.hasDate ? ' hidden' : '') + '>Rings once, the next time it reaches this time.</p></div></div>' +
+    '<div class="field glass"><label for="ed-label">Label</label><input id="ed-label" type="text" value="' + esc(a.label) + '" placeholder="Alarm"></div>' +
+    '<div class="card glass"><div class="opt"><label for="ed-snooze">Snooze</label><select id="ed-snooze">' + snz + '</select></div><div class="opt"><label for="ed-dur">Plan length</label><select id="ed-dur">' + durs + '</select></div></div>' +
+    '<button class="cta" data-act="edsave">' + ic('check', 22, 2.4) + (editor.isNew ? 'Set alarm' : 'Save') + '</button>' +
+    (editor.isNew ? '' : '<button class="ghost" data-act="eddel">' + ic('trash', 20) + 'Delete alarm</button>');
+  sheetShell(editor.isNew ? 'New alarm' : 'Edit alarm', body);
+}
+function editorFill() {
+  const text = $('#ed-ai').value, hint = $('#ed-hint'); hint.hidden = false;
+  const first = parseSentence(text).find(i => i.kind === 'alarm');
+  if (!first) { hint.textContent = 'I couldn\'t find a time. Try “wake me at 6:30 on weekdays”.'; fx.warn(); return; }
+  const a = editor.a; a.label = first.label; a.weekdays = [...first.weekdays]; a.hour = first.hour; a.minute = first.minute;
+  editor.hasDate = !!first.date && !first.weekdays.length; if (first.date) a.date = dateKey(first.date);
+  $('#ed-time').value = pad(a.hour) + ':' + pad(a.minute); $('#ed-label').value = a.label;
+  document.querySelectorAll('.dp').forEach(b => b.setAttribute('aria-pressed', String(a.weekdays.includes(+b.dataset.n))));
+  syncOnce(); if (a.date) $('#ed-date').value = a.date;
+  hint.textContent = 'Filled in from your sentence. Check it, then set the alarm.'; fx.saved();
+}
+function syncOnce() {
+  const a = editor.a; $('#ed-once').hidden = a.weekdays.length > 0;
+  $('#ed-hasdate').setAttribute('aria-checked', String(editor.hasDate));
+  $('#ed-daterow').hidden = !editor.hasDate; $('#ed-oncehint').hidden = editor.hasDate;
+}
+function showSaved(text) {
+  const el = document.createElement('div'); el.className = 'saved';
+  el.innerHTML = '<div><div class="drop"><i></i><i></i><i></i><u>' + ic('check', 36, 2.4) + '</u></div><p class="glass">' + esc(text) + '</p></div>';
+  $('#app').appendChild(el); setTimeout(() => el.remove(), 1350);
+}
+function saveEditor() {
+  const a = editor.a, [h, m] = ($('#ed-time').value || '07:00').split(':').map(Number);
+  a.hour = h; a.minute = m; a.label = $('#ed-label').value.trim() || 'Alarm';
+  a.snooze = +$('#ed-snooze').value; a.duration = +$('#ed-dur').value;
+  a.date = (!a.weekdays.length && editor.hasDate) ? ($('#ed-date').value || dateKey(new Date())) : null;
+  a.enabled = true; upsert(a); fx.saved();
+  const f = nextFire(a); showSaved(f ? 'Rings in ' + countdown((f - Date.now()) / 1000) : 'Saved');
+  setTimeout(() => { closeSheet(); render(); }, 1300);
+}
+function openAI(prefill) {
+  ai = { text: prefill || '', removed: new Set() };
+  const ex = ['Wake me at 6:30 on weekdays', 'Take medicine at 1:30 am every day', 'Alarm for the AI seminar at 10, lunch at noon, and a 20 minute nap timer', 'Dinner at 7 tomorrow'];
+  const body = '<div style="display:flex;gap:14px;align-items:center"><div class="orb" aria-hidden="true"></div><div><h3 style="font-family:var(--display);font-size:28px;font-weight:800;line-height:1.1">Just say it</h3><p class="hint" style="padding:0">Type or dictate. Nothing is set until you confirm.</p></div></div>' +
+    '<div class="aibar glass" style="align-items:flex-start;padding-top:8px;padding-bottom:8px"><textarea id="ai-text" rows="3" placeholder="Wake me at 6:30 on weekdays" aria-label="Describe your alarms and timers" style="padding-top:8px">' + esc(ai.text) + '</textarea></div>' +
+    '<div id="ai-ex" style="display:flex;flex-direction:column;gap:8px"><span class="eyebrow">Try saying</span>' + ex.map((e, i) => '<button class="ex glass" data-act="aiex" data-i="' + i + '"><span>' + esc(e) + '</span><span style="color:var(--indigo)">' + ic('arrow', 18) + '</span></button>').join('') + '</div>' +
+    '<div id="ai-res" style="display:flex;flex-direction:column;gap:10px"></div>' +
+    '<button class="cta" id="ai-add" data-act="aiadd" disabled>Add</button>';
+  sheetShell('Ask Waketide', body);
+  ai.ex = ex; renderAI();
+}
+function keptIntents() { return parseSentence(ai.text).filter((_, i) => !ai.removed.has(i)); }
+function renderAI() {
+  const text = ai.text.trim(), parsed = parseSentence(ai.text), res = $('#ai-res'), add = $('#ai-add');
+  $('#ai-ex').hidden = !!text;
+  if (!text) res.innerHTML = '';
+  else if (!parsed.length) res.innerHTML = '<p class="hint">I couldn\'t find a time or a duration. Try “wake me at 6:30 on weekdays” or “10 minute timer”.</p>';
+  else res.innerHTML = '<span class="eyebrow">Here is what I will set</span>' + parsed.map((i, n) => {
+    const gone = ai.removed.has(n);
+    return '<div class="res glass' + (gone ? ' gone' : '') + '"><span class="k">' + ic(i.kind === 'alarm' ? 'alarm' : 'timer') + '</span><span class="t"><b>' + esc(intentTitle(i)) + '</b><small>' + esc(intentSub(i)) + '</small></span><button class="ib" style="background:transparent;border-color:transparent;box-shadow:none" data-act="airm" data-i="' + n + '" aria-label="' + (gone ? 'Include ' : 'Remove ') + esc(i.label) + '">' + ic(gone ? 'undo' : 'x', 18, 2.2) + '</button></span></div>';
+  }).join('');
+  const n = parsed.filter((_, i) => !ai.removed.has(i)).length;
+  add.disabled = n === 0; add.textContent = n === 0 ? 'Add' : n === 1 ? 'Add 1 item' : 'Add ' + n + ' items';
+}
+function applyAI() {
+  let alarms = 0, timer = false, skipped = 0;
+  keptIntents().forEach(i => {
+    if (i.kind === 'alarm') { upsert(intentAlarm(i)); alarms++; }
+    else if (!timer) { startTimer(i.label, i.duration); ui.draft.label = i.label; timer = true; } else skipped++;
+  });
+  const parts = [];
+  if (alarms) parts.push(alarms === 1 ? '1 alarm set' : alarms + ' alarms set');
+  if (timer) parts.push('timer started');
+  if (skipped) parts.push('only one timer can run at a time');
+  fx.saved(); closeSheet(); if (timer) ui.tab = 'timer'; render(true);
+  toast(parts.length ? cap(parts.join(', ')) : 'Nothing to add');
+}
+
+/* ---------- ringing ---------- */
+function openRing(r) {
+  ringing = r; startAlarmSound();
+  const alarm = r.kind === 'alarm', p = alarm ? parts12(r.alarm) : { t: '0:00', ap: '' }, now = new Date();
+  const el = document.createElement('div'); el.className = 'ring'; el.id = 'ring'; el.setAttribute('role', 'alertdialog'); el.setAttribute('aria-label', alarm ? 'Alarm ringing: ' + r.alarm.label : 'Timer finished');
+  el.innerHTML = '<div class="n1"></div><div class="n2"></div><div class="n3"></div><i class="rr"></i><i class="rr"></i><i class="rr"></i><div class="rbody"><div class="rtxt"><div class="d">' + longDate(now) + '</div><div class="t">' + p.t + (p.ap ? '<small>' + p.ap + '</small>' : '') + '</div><div class="l">' + esc(r.label || r.alarm.label) + '</div></div><div style="flex:1"></div>' +
+    (alarm ? '<button class="snz dg" data-act="snooze">' + ic('moon', 22) + 'Snooze ' + (r.alarm.snooze || 9) + ' min</button>' : '') +
+    '<div class="trk dg" id="trk"><span>Slide to stop</span><button class="hnd" id="hnd" aria-label="Stop">' + ic('arrow', 28, 2.2) + '</button></div></div>';
+  $('#app').appendChild(el);
+  const hnd = $('#hnd'), trk = $('#trk'); let x0 = null, dx = 0;
+  const max = () => trk.clientWidth - hnd.offsetWidth - 12;
+  hnd.addEventListener('pointerdown', e => { x0 = e.clientX; hnd.setPointerCapture(e.pointerId); hnd.style.transition = 'none'; });
+  hnd.addEventListener('pointermove', e => { if (x0 === null) return; dx = Math.min(Math.max(0, e.clientX - x0), max()); hnd.style.transform = 'translateX(' + dx + 'px)'; });
+  const end = () => { if (x0 === null) return; x0 = null; if (dx > max() * 0.85) stopRing(); else { hnd.style.transition = 'transform .5s cubic-bezier(.34,1.56,.64,1)'; hnd.style.transform = 'none'; dx = 0; } };
+  hnd.addEventListener('pointerup', end); hnd.addEventListener('pointercancel', end);
+  hnd.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') stopRing(); });
+}
+function closeRing() { const el = $('#ring'); if (el) el.remove(); ringing = null; stopAlarmSound(); }
+function stopRing() {
+  const r = ringing; closeRing(); fx.saved();
+  if (r && r.kind === 'alarm') { const a = findAlarm(r.alarm.id); if (a && !a.weekdays.length) { a.enabled = false; persist(); } }
+  if (r && r.kind === 'timer') { state.timer = null; persist(); }
+  render();
+}
+function snoozeRing() {
+  const r = ringing; if (!r || r.kind !== 'alarm') return;
+  const mins = r.alarm.snooze || 9, at = new Date(Date.now() + mins * 60000);
+  state.snoozes.push({ id: uid(), at: at.getTime(), alarm: { ...r.alarm, hour: at.getHours(), minute: at.getMinutes(), id: r.alarm.id } });
+  persist(); closeRing(); toast('Snoozed for ' + mins + ' min'); fx.tick();
+}
+
+/* ---------- the clock ---------- */
+function shouldRing(a, now) {
+  if (!a.enabled || a.hour !== now.getHours() || a.minute !== now.getMinutes()) return false;
+  if (a.weekdays.length) return a.weekdays.includes(now.getDay() + 1);
+  return a.date ? a.date === dateKey(now) : true;
+}
+function updateHero() {
+  const h = $('#hero'); if (!h || ui.tab !== 'week') return;
+  const n = nextAlarm(), on = state.alarms.filter(a => a.enabled).length;
+  h.querySelector('.big').textContent = n ? fullTime(n.a) : 'No alarms on';
+  h.querySelector('.sub').textContent = n ? n.a.label + ', in ' + countdown((n.f - Date.now()) / 1000) : 'Turn one on or add a new one';
+  h.querySelector('.cnt b').textContent = on;
+}
+let ticks = 0;
+function tick() {
+  const now = new Date(), key = dateKey(now) + ' ' + pad(now.getHours()) + ':' + pad(now.getMinutes());
+  if (!ringing) {
+    for (const a of state.alarms) if (shouldRing(a, now) && fired[a.id] !== key) { fired[a.id] = key; openRing({ kind: 'alarm', alarm: a, label: a.label }); break; }
+    if (!ringing) {
+      const i = state.snoozes.findIndex(s => s.at <= Date.now());
+      if (i >= 0) { const [s] = state.snoozes.splice(i, 1); persist(); openRing({ kind: 'alarm', alarm: s.alarm, label: s.alarm.label }); }
+    }
+    if (!ringing && state.timer && tFinished() && !state.timer.notified) timerDone();
+  }
+  if (!ringing) expireOneOffs();
+  if (++ticks % 15 === 0) updateHero();
+}
+
+/* ---------- events ---------- */
+function toggleAlarm(id) {
+  const a = findAlarm(id); if (!a) return;
+  a.enabled = !a.enabled; persist(); a.enabled ? fx.on() : fx.off();
+  document.querySelectorAll('[data-card="' + id + '"]').forEach(c => {
+    c.querySelector('.tog').setAttribute('aria-checked', String(a.enabled));
+    c.querySelector('.acard').classList.toggle('off', !a.enabled);
+    c.querySelector('.dot').classList.toggle('on', a.enabled);
+  });
+  updateHero();
+}
+function deleteAlarm(id) {
+  const i = state.alarms.findIndex(a => a.id === id); if (i < 0) return;
+  const [a] = state.alarms.splice(i, 1); persist(); fx.del(); render();
+  toast('Deleted ' + a.label, () => { upsert(a); fx.tick(); render(); });
+}
+const acts = {
+  tab(t) { ui.tab = t.dataset.tab; fx.tick(); render(true); },
+  new(t) { fx.tick(); openEditor(null, t.dataset.date || (ui.tab === 'schedule' ? dateKey(ui.monthSel) : ui.tab === 'plans' && !sameDay(ui.planSel, new Date()) ? dateKey(ui.planSel) : ui.tab === 'week' && !sameDay(ui.weekSel, new Date()) ? dateKey(ui.weekSel) : null)); },
+  ai() { fx.tick(); openAI(); },
+  edit(t) { const a = findAlarm(t.dataset.id); if (a) { fx.tick(); openEditor(a); } },
+  toggle(t) { toggleAlarm(t.dataset.id); },
+  del(t) { deleteAlarm(t.dataset.id); },
+  weekday(t) { ui.weekSel = fromKey(t.dataset.day); fx.tick(); render(true); },
+  monthday(t) { ui.monthSel = fromKey(t.dataset.day); fx.tick(); render(true); },
+  prevmonth() { ui.month = new Date(ui.month.getFullYear(), ui.month.getMonth() - 1, 1); fx.tick(); render(true); },
+  nextmonth() { ui.month = new Date(ui.month.getFullYear(), ui.month.getMonth() + 1, 1); fx.tick(); render(true); },
+  prevday() { ui.planSel = addDays(ui.planSel, -1); fx.tick(); render(true); },
+  nextday() { ui.planSel = addDays(ui.planSel, 1); fx.tick(); render(true); },
+  today() { ui.planSel = startOfDay(new Date()); fx.tick(); render(true); },
+  preset(t) { const s = +t.dataset.s; ui.draft.h = Math.floor(s / 3600); ui.draft.m = Math.floor((s % 3600) / 60); ui.draft.s = s % 60; fx.tick(); render(); },
+  tstart() { const lab = ($('#tl-label') && $('#tl-label').value.trim()) || 'Timer'; ui.draft.label = lab; startTimer(lab, chosenSeconds()); fx.saved(); render(); },
+  tpause() { const t = state.timer; if (!t) return; if (t.left != null) { t.end = Date.now() + t.left * 1000; t.left = null; } else { t.left = tRemaining(); t.end = null; } persist(); fx.tick(); render(); },
+  tplus() { const t = state.timer; if (!t) return; if (t.left != null) t.left += 60; else t.end += 60000; t.total += 60; persist(); fx.tick(); render(); },
+  tcancel() { state.timer = null; persist(); fx.del(); render(); },
+  tdone() { stopAlarmSound(); state.timer = null; persist(); render(); },
+  testring() { const n = nextAlarm(); openRing({ kind: 'alarm', alarm: n ? n.a : mk('Get ready for office', 5, 30, [2, 3, 4, 5, 6], null, true, 0), label: n ? n.a.label : 'Get ready for office' }); },
+  reset() { state = seed(); persist(); render(true); toast('Sample alarms restored'); },
+  closesheet() { closeSheet(); },
+  edday(t) { const n = +t.dataset.n, a = editor.a, i = a.weekdays.indexOf(n); if (i >= 0) a.weekdays.splice(i, 1); else a.weekdays.push(n); t.setAttribute('aria-pressed', String(i < 0)); fx.tick(); syncOnce(); },
+  edhasdate() { editor.hasDate = !editor.hasDate; fx.tick(); syncOnce(); },
+  edai() { editorFill(); },
+  edsave() { saveEditor(); },
+  eddel() { const id = editor.a.id; closeSheet(); deleteAlarm(id); },
+  aiex(t) { ai.text = ai.ex[+t.dataset.i]; $('#ai-text').value = ai.text; ai.removed = new Set(); fx.tick(); renderAI(); },
+  airm(t) { const i = +t.dataset.i; ai.removed.has(i) ? ai.removed.delete(i) : ai.removed.add(i); fx.tick(); renderAI(); },
+  aiadd() { applyAI(); },
+  snooze() { snoozeRing(); }
+};
+$('#app').addEventListener('click', e => {
+  const t = e.target.closest('[data-act]'); if (!t) return;
+  const f = acts[t.dataset.act]; if (f) f(t);
+});
+$('#app').addEventListener('input', e => {
+  const id = e.target.id;
+  if (id === 'th' || id === 'tm' || id === 'ts') {
+    const v = Math.max(0, Math.min(id === 'th' ? 23 : 59, parseInt(e.target.value, 10) || 0));
+    ui.draft[id === 'th' ? 'h' : id === 'tm' ? 'm' : 's'] = v;
+    const s = chosenSeconds(), vt = $('#vtime'); if (vt) vt.textContent = clock(s);
+    const go = $('[data-act="tstart"]'); if (go) go.disabled = s < 1;
+    document.querySelectorAll('[data-act="preset"]').forEach(b => b.classList.toggle('sel', +b.dataset.s === s));
+  } else if (id === 'tl-label') { ui.draft.label = e.target.value; const c = $('#vcap'); if (c) c.textContent = e.target.value || 'Timer'; }
+  else if (id === 'ai-text' && ai) { ai.text = e.target.value; ai.removed = new Set(); renderAI(); }
+});
+$('#app').addEventListener('keydown', e => {
+  if (e.key === 'Escape' && $layer.firstChild) closeSheet();
+  if (e.key === 'Enter' && e.target.id === 'ed-ai') { e.preventDefault(); editorFill(); }
+});
+
+/* ---------- go ---------- */
+expireOneOffs(); render(true);
+setInterval(tick, 1000); requestAnimationFrame(loop);
+})();
+
+</script>
+</body></html>

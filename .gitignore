@@ -1,0 +1,7 @@
+Waketide.xcodeproj/
+xcuserdata/
+DerivedData/
+.build/
+.DS_Store
+Waketide/Info.plist
+WaketideWidget/Info.plist
