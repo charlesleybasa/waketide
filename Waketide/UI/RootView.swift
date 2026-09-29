@@ -24,9 +24,19 @@ enum AppTab: Hashable, CaseIterable {
 
 @MainActor
 final class Router: ObservableObject {
-    @Published var selectedTab: AppTab = .week
+    @Published var selectedTab: AppTab = {
+        // Allow screenshot automation to pick the starting tab via
+        // `xcrun simctl launch … --args -screenshot_tab timer`
+        if let override = UserDefaults.standard.string(forKey: "screenshot_tab"),
+           let tab = AppTab.allCases.first(where: { $0.title.lowercased() == override.lowercased() }) {
+            return tab
+        }
+        return .week
+    }()
     @Published var editing: WakeAlarm?
-    @Published var showAI = false
+    @Published var showAI: Bool = {
+        return UserDefaults.standard.bool(forKey: "screenshot_ai")
+    }()
     /// The day the visible screen is showing, so the plus button adds to it.
     @Published var focusDay: Date?
 
